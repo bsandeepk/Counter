@@ -1,33 +1,21 @@
-import {Component} from 'react'
-import Clock from './components/Clock'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import NotFound from './components/NotFound'
 
-import './App.css'
+import Header from './components/Header'
+import Home from './components/Home'
+import About from './components/About'
+import Contact from './components/Contact'
 
-class App extends Component {
-  state = {showClock: false}
-
-  onToggleClock = () => {
-    this.setState(prevState => {
-      const {showClock} = prevState
-      return {showClock: !showClock}
-    })
-  }
-
-  render() {
-    const {showClock} = this.state
-    return (
-      <div className="app-container">
-        <button
-          type="button"
-          className="toggle-button"
-          onClick={this.onToggleClock}
-        >
-          {showClock ? 'Hide Clock' : 'Show Clock'}
-        </button>
-        {showClock && <Clock />}
-      </div>
-    )
-  }
-}
+const App = () => (
+  <BrowserRouter>
+    <Header />
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/about" component={About} />
+      <Route exact path="/contact" component={Contact} />
+      <Route component={NotFound} />
+    </Switch>
+  </BrowserRouter>
+)
 
 export default App
