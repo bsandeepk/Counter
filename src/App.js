@@ -1,30 +1,77 @@
 import {Component} from 'react'
-import Clock from './components/Clock'
+import UserProfile from './components/UserProfile'
 
 import './App.css'
 
-class App extends Component {
-  state = {showClock: false}
+const initialUserDetailsList = [
+  {
+    uniqueNo: 1,
+    imageUrl: 'https://assets.ccbp.in/frontend/react-js/esther-howard-img.png',
+    name: 'Esther Howard',
+    role: 'Software Developer',
+  },
+  {
+    uniqueNo: 2,
+    imageUrl: 'https://assets.ccbp.in/frontend/react-js/floyd-miles-img.png',
+    name: 'Floyd Miles',
+    role: 'Software Developer',
+  },
+  {
+    uniqueNo: 3,
+    imageUrl: 'https://assets.ccbp.in/frontend/react-js/jacob-jones-img.png',
+    name: 'Jacob Jones',
+    role: 'Software Developer',
+  },
+  {
+    uniqueNo: 4,
+    imageUrl: 'https://assets.ccbp.in/frontend/react-js/devon-lane-img.png',
+    name: 'Devon Lane',
+    role: 'Software Developer',
+  },
+]
 
-  onToggleClock = () => {
-    this.setState(prevState => {
-      const {showClock} = prevState
-      return {showClock: !showClock}
-    })
+class App extends Component {
+  state = {
+    searchInput: '',
+    userDetailsList: initialUserDetailsList,
   }
 
+  onChangeSearchInput = event => {
+    this.setState({
+      searchInput: event.target.value,
+    })
+  }
+  onDeleteUser = uniqueNo => {
+    const {userDetailsList} = this.state
+    const filteredUsersData = userDetailsList.filter(
+      eachUser => eachUser.uniqueNo !== uniqueNo,
+    )
+    this.setState({
+      userDetailsList: filteredUsersData,
+    })
+  }
   render() {
-    const {showClock} = this.state
+    const {searchInput, userDetailsList} = this.state
+    const searchResults = userDetailsList.filter(eachUser =>
+      eachUser.name.includes(searchInput),
+    )
     return (
       <div className="app-container">
-        <button
-          type="button"
-          className="toggle-button"
-          onClick={this.onToggleClock}
-        >
-          {showClock ? 'Hide Clock' : 'Show Clock'}
-        </button>
-        {showClock && <Clock />}
+        <h1 className="title">Users List</h1>
+        <input
+          type="search"
+          onChange={this.onChangeSearchInput}
+          value={searchInput}
+        />
+        <ul className="list-container">
+          {searchResults.map(eachUser => (
+            <UserProfile
+              userDetails={eachUser}
+              key={eachUser.uniqueNo}
+              onDeleteUser={this.onDeleteUser}
+            />
+          ))}
+        </ul>
       </div>
     )
   }
